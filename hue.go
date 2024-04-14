@@ -38,8 +38,8 @@ func run() (err error) {
 		return errParse
 	}
 	cmd := exec.Command(os.Args[1], os.Args[2:]...)
-	stdout := make(chanWriter, 1024)
-	stderr := make(chanWriter, 1024)
+	stdout := make(chanWriter)
+	stderr := make(chanWriter)
 	done := make(chan bool)
 	cmd.Stdout = stdout
 	cmd.Stderr = stderr
