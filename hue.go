@@ -41,6 +41,7 @@ func run() (err error) {
 	stdout := make(chanWriter)
 	stderr := make(chanWriter)
 	done := make(chan bool)
+	cmd.Stdin = os.Stdin
 	cmd.Stdout = stdout
 	cmd.Stderr = stderr
 	go func() {
