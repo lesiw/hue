@@ -14,6 +14,10 @@ bold and green.
 Power users can provide `HUEOUT` and `HUEERR` specific ANSI escape codes if they
 so desire.
 
+## Demo
+
+![lesiw.io/hue animated demo](./demo.gif)
+
 ## Installation
 
 ### curl
