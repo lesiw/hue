@@ -55,15 +55,15 @@ func run() (err error) {
 		select {
 		case m := <-stdout:
 			if last != stdout {
-				fmt.Fprint(os.Stdout, "\033[0m", outprefix)
+				fmt.Print("\033[0m", outprefix)
 			}
-			fmt.Fprint(os.Stdout, m)
+			fmt.Print(m)
 			last = stdout
 		case m := <-stderr:
 			if last != stderr {
-				fmt.Fprint(os.Stderr, "\033[0m", errprefix)
+				fmt.Print("\033[0m", errprefix)
 			}
-			fmt.Fprint(os.Stderr, m)
+			fmt.Print(m)
 			last = stderr
 		case <-done:
 			return nil
