@@ -113,7 +113,6 @@ func runAsync(cmd *exec.Cmd) error {
 	stdout := make(chanWriter)
 	stderr := make(chanWriter)
 	done := make(chan bool, 1)
-	cmd.Stdin = os.Stdin
 	cmd.Stdout = stdout
 	cmd.Stderr = stderr
 	if err := cmd.Start(); err != nil {
