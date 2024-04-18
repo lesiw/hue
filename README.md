@@ -1,8 +1,7 @@
 # hue
 
 `hue` colors standard error (and optionally standard output) for the command you
-provide. For example, `hue ls /etc/passwd /badfile` will print `/etc/passwd`
-normally, but the "No such file or directory" error will be red.
+provide.
 
 You can customize `hue`'s output colors with the environment variables `HUEOUT`
 and `HUEERR`. For example, `HUEERR=bold` will set standard error to bold,
@@ -23,7 +22,7 @@ so desire.
 ### curl
 
 ```sh
-curl -L lesiw.io/hue | sh
+curl lesiw.io/hue | sh
 ```
 
 ### go install
@@ -31,3 +30,15 @@ curl -L lesiw.io/hue | sh
 ```sh
 go install lesiw.io/hue@latest
 ```
+
+## Details
+
+By default, `hue` uses [go-iomux](https://github.com/Netflix/go-iomux), which is
+a Go port of [io-mux](https://github.com/joshtriplett/io-mux), which is a Rust
+implementation of the technique in
+[rederr](https://github.com/poettering/rederr). This has the benefit of
+preserving order between stdout and stderr at the small cost of using sockets
+for stdout and stderr.
+
+In the rare instance where sockets do not perform as expected, `HUEASYNC=1` will
+fall back to an approach without sockets, which will break message ordering.
