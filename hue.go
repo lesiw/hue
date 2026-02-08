@@ -10,6 +10,7 @@ import (
 	"os/signal"
 
 	"github.com/netflix/go-iomux"
+
 	"lesiw.io/flag"
 )
 
