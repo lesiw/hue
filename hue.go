@@ -16,7 +16,7 @@ import (
 
 var (
 	flags                = flag.NewSet(os.Stderr, "hue COMMAND")
-	errParse             = errors.New("parse error")
+	errParse             = fmt.Errorf("parse error")
 	outprefix, errprefix string
 	stdout, stderr       *os.File
 	defers               deferlist
