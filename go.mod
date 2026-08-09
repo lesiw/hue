@@ -1,6 +1,6 @@
 module lesiw.io/hue
 
-go 1.18
+go 1.25.0
 
 require lesiw.io/flag v0.7.0
 
