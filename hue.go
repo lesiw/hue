@@ -14,11 +14,13 @@ import (
 	"lesiw.io/flag"
 )
 
-var flags = flag.NewSet(os.Stderr, "hue COMMAND")
-var errParse = errors.New("parse error")
-var outprefix, errprefix string
-var stdout, stderr *os.File
-var defers deferlist
+var (
+	flags                = flag.NewSet(os.Stderr, "hue COMMAND")
+	errParse             = errors.New("parse error")
+	outprefix, errprefix string
+	stdout, stderr       *os.File
+	defers               deferlist
+)
 
 type msg int
 
@@ -68,20 +70,20 @@ func run() (err error) {
 }
 
 func runSync(cmd *exec.Cmd) (err error) {
-	mux := &iomux.Mux[msg]{}
+	mux := new(iomux.Mux[msg])
 	defers.add(func() { _ = mux.Close() })
 	if stdout, err = mux.Tag(msgout); err != nil {
-		return fmt.Errorf("failed creating mux tag: %s", err)
+		return fmt.Errorf("failed creating mux tag: %w", err)
 	}
 	if stderr, err = mux.Tag(msgerr); err != nil {
-		return fmt.Errorf("failed creating mux tag: %s", err)
+		return fmt.Errorf("failed creating mux tag: %w", err)
 	}
 	cmd.Stdout = stdout
 	cmd.Stderr = stderr
 	ctx, cancel := context.WithCancel(context.Background())
 	defers.add(cancel)
 	if err = cmd.Start(); err != nil {
-		return fmt.Errorf("could not start command: %s", err)
+		return fmt.Errorf("could not start command: %w", err)
 	}
 	go func() { _ = cmd.Wait(); cancel() }()
 	var last msg
@@ -111,13 +113,15 @@ func runSync(cmd *exec.Cmd) (err error) {
 }
 
 func runAsync(cmd *exec.Cmd) error {
-	stdout := make(chanWriter)
-	stderr := make(chanWriter)
-	done := make(chan bool, 1)
+	var (
+		stdout = make(chanWriter)
+		stderr = make(chanWriter)
+		done   = make(chan bool, 1)
+	)
 	cmd.Stdout = stdout
 	cmd.Stderr = stderr
 	if err := cmd.Start(); err != nil {
-		return fmt.Errorf("could not start command: %s", err)
+		return fmt.Errorf("could not start command: %w", err)
 	}
 	go func() { _ = cmd.Wait(); done <- true }()
 	defers.add(func() { done <- true })
